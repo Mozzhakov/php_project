@@ -20,4 +20,3 @@
             <a href="/php_project/login.php">Log in</a>
         <?php endif; ?>
     </header>
-    <h1>Articles</h1>
