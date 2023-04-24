@@ -4,9 +4,13 @@ require './includes/modify-date.php';
 $conn = require('./includes/db.php');
 
 if (Auth::isLoggedIn()) {
-    $articles = Article::getAll($conn);
+    $totalAmountOfArticles = count(Article::getAll($conn));
+    $paginator = new Paginator($_GET['page'] ?? 1, 4, $totalAmountOfArticles);
+    $articles = Article::getPageOfArticles($conn, $paginator->limit, $paginator->offset);
 } else {
-    $articles = Article::getAllPublished($conn);
+    $totalAmountOfPublishedArticles = count(Article::getAllPublished($conn));
+    $paginator = new Paginator($_GET['page'] ?? 1, 4, $totalAmountOfPublishedArticles);
+    $articles = Article::getPageOfPublishedArticles($conn, $paginator->limit, $paginator->offset);
 }
 
 ?>
@@ -32,6 +36,16 @@ if (Auth::isLoggedIn()) {
     </li>
     <?php endforeach; ?>
 </ul>
+<nav>
+    <ul>
+        <?php if ($paginator->previousPage !== 0) : ?>
+        <li><a href="?page=<?= $paginator->previousPage ?>">Previous</a></li>
+        <?php endif; ?>
+        <?php if ((int)$paginator->totalPages + 1 !== $paginator->nextPage) : ?>
+        <li><a href="?page=<?= $paginator->nextPage ?>">Next</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 <?php endif;
 require './includes/footer.php';
 ?>

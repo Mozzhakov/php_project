@@ -9,7 +9,6 @@ if (isset($_GET['id'])) {
 } else {
     $article = null;
 }
-// var_dump($article);
 ?>
 
 <?php if ($article) : ?>
@@ -30,7 +29,7 @@ if (isset($_GET['id'])) {
 <?php if (Auth::isLoggedIn()) : ?>
 <a href="/php_project/edit-article.php?id=<?= $article[0]['id']; ?>">Edit</a>
 <a href="/php_project/delete-article.php?id=<?= $article[0]['id']; ?>" id="deleteBtn">Delete</a>
-<!-- <a href="/php_project/edit-image.php">Image</a> -->
+<a href="/php_project/edit-article-image.php?id=<?= $article[0]['id']; ?>">Edit image</a>
 <?php endif; ?>
 <?php else : ?>
 <p>Article not found</p>

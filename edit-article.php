@@ -1,12 +1,3 @@
-<!-- 
-    1. add autoload 
-    2. add connection
-    3. check if article exists
-    4. check if method - post
-    5. fill in all parametrs 
-    6. if article update - then redirect to article page
- -->
-
 <?php
 require './includes/init.php';
 

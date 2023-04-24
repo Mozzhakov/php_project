@@ -1,10 +1,3 @@
-<!-- variables -->
-<!-- fn getAll -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-
 <?php
 
 class Article
@@ -22,8 +15,20 @@ class Article
                 ORDER BY id;";
 
         $results = $conn->query($sql);
-
         return $results->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function getPageOfArticles($conn, $limit, $offset)
+    {
+        $sql = "SELECT *
+                FROM my_first_db.test_table
+                ORDER BY id
+                LIMIT :limit 
+                OFFSET :offset";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public static function getAllPublished($conn)
     {
@@ -33,8 +38,21 @@ class Article
                 ORDER BY id";
 
         $results = $conn->query($sql);
-
         return $results->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function getPageOfPublishedArticles($conn, $limit, $offset)
+    {
+        $sql = "SELECT *
+                FROM my_first_db.test_table
+                WHERE published_at IS NOT NULL
+                ORDER BY id
+                LIMIT :limit 
+                OFFSET :offset";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public static function getArticleByID($conn, $id)
     {
