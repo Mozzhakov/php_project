@@ -11,7 +11,7 @@ class Article
     public static function getAll($conn)
     {
         $sql = "SELECT *
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 ORDER BY id;";
 
         $results = $conn->query($sql);
@@ -20,7 +20,7 @@ class Article
     public static function getPageOfArticles($conn, $limit, $offset)
     {
         $sql = "SELECT *
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 ORDER BY id
                 LIMIT :limit 
                 OFFSET :offset";
@@ -33,7 +33,7 @@ class Article
     public static function getAllPublished($conn)
     {
         $sql = "SELECT *
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 WHERE published_at IS NOT NULL
                 ORDER BY id";
 
@@ -43,7 +43,7 @@ class Article
     public static function getPageOfPublishedArticles($conn, $limit, $offset)
     {
         $sql = "SELECT *
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 WHERE published_at IS NOT NULL
                 ORDER BY id
                 LIMIT :limit 
@@ -57,7 +57,7 @@ class Article
     public static function getArticleByID($conn, $id)
     {
         $sql = "SELECT *
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 WHERE id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -68,13 +68,13 @@ class Article
     }
     public static function getArticleWithCategories($conn, $id)
     {
-        $sql = "SELECT test_table.*, category.name AS category_name
-                FROM my_first_db.test_table
+        $sql = "SELECT article.*, category.name AS category_name
+                FROM my_first_db.article
                 LEFT JOIN my_first_db.article_category
-                ON test_table.id = article_category.article_id
+                ON article.id = article_category.article_id
                 LEFT JOIN my_first_db.category
                 ON article_category.category_id = category.id
-                WHERE test_table.id = :id";
+                WHERE article.id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -124,7 +124,7 @@ class Article
     public function updateArticle($conn)
     {
         if ($this->validate()) {
-            $sql = "UPDATE my_first_db.test_table
+            $sql = "UPDATE my_first_db.article
                 SET title = :title,
                      content = :content,
                      published_at = :published_at
@@ -146,7 +146,7 @@ class Article
     public function addArticle($conn)
     {
         if ($this->validate()) {
-            $sql = "INSERT INTO my_first_db.test_table (title, content, published_at)
+            $sql = "INSERT INTO my_first_db.article (title, content, published_at)
                 VALUES (:title, :content, :published_at)";
             $stmt = $conn->prepare($sql);
 
@@ -168,7 +168,7 @@ class Article
     public function deleteArticle($conn)
     {
         $sql = "DELETE
-                FROM my_first_db.test_table
+                FROM my_first_db.article
                 WHERE id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -186,7 +186,7 @@ class Article
     }
     public function publish($conn)
     {
-        $sql = "UPDATE my_first_db.test_table
+        $sql = "UPDATE my_first_db.article
                 SET published_at = :published_at
                 WHERE id = :id";
         $stmt = $conn->prepare($sql);
